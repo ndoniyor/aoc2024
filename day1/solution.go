@@ -47,15 +47,20 @@ func calculateDistance(parsedLists [][]int) int {
 }
 
 
-func _countOccurences(list []int, testNum int) int {
-  count := 0
+func _countOccurences(list []int) map[int] int{
+  occurences := make(map[int]int)
   for _, num := range list{
-    if num == testNum {
-      count+=1
+    _, ok := occurences[num]
+
+    if ok {
+      occurences[num] += 1 
+    } else {
+      occurences[num] = 1
     }
   }
-  return count
+  return occurences
 }
+
 /*
 Similarity score is the sum of all the products of the numbers
 in the left list with their occurences in the right list
@@ -63,10 +68,12 @@ in the left list with their occurences in the right list
 func calculateSimilarityScore(parsedLists [][]int) int {
   similarityScore := 0
 
+  occurences := _countOccurences(parsedLists[1])
+
   for i := range parsedLists[0]{
     list1Num := parsedLists[0][i]
-    
-    similarityScore += list1Num * _countOccurences(parsedLists[1], list1Num)
+
+    similarityScore += list1Num * occurences[list1Num]
   }
 
   return similarityScore
